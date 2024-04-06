@@ -15,8 +15,15 @@ func (app *application) routes() http.Handler {
 
 	mux.Use(middleware.Recoverer)
 	mux.Use(middleware.Timeout(60 * time.Second))
-  
-  mux.Handle("/static/*", http.StripPrefix("/static", fs))
+
+	mux.Handle("/static/*", http.StripPrefix("/static", fs))
+
+	mux.Get("/test-patterns", app.TestPatterns)
+
+	mux.Get("/api/dog-from-factory", app.CreateDogFromFactory)
+	mux.Get("/api/dog-from-abstract-factory", app.CreateDogFromAbstractFactory)
+	mux.Get("/api/cat-from-factory", app.CreateCatFromFactory)
+	mux.Get("/api/cat-from-abstract-factory", app.CreateCatFromAbstractFactory)
 
 	mux.Get("/", app.Home)
 	mux.Get("/{page}", app.Page)
