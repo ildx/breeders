@@ -1,20 +1,21 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/ildx/breeders/models"
 )
 
 const port = ":4000"
 
 type application struct {
 	config        appConfig
-	DB            *sql.DB
+	Models        models.Models
 	templateCache map[string]*template.Template
 }
 
@@ -37,7 +38,7 @@ func main() {
 		log.Panic(err)
 	}
 
-  app.DB = db
+	app.Models = *models.New(db)
 
 	server := &http.Server{
 		Addr:              port,

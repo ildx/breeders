@@ -1,11 +1,86 @@
 {{template "base" .}}
+<!-- css -->
+{{define "css"}}
+<link
+  href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+  rel="stylesheet"
+  type="text/css"
+/>
+{{end}}
+
 <!-- content -->
 {{define "content"}}
 <div class="container">
   <div class="row">
     <div class="col">
       <h3>Dog Breeds</h3>
+      <hr />
+      <table class="dog-breeds table table-striped table-compact">
+        <thead>
+          <tr>
+            <th>Details</th>
+            <th>Breeds</th>
+            <th></th>
+            <th></th>
+            <th>
+              <div class="text-center">Average Weight (lbs)</div>
+            </th>
+            <th>
+              <div class="text-center">Average Lifespan (years)</div>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
     </div>
   </div>
 </div>
+{{end}}
+
+<!-- js -->
+{{define "js"}}
+<script
+  src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+  type="text/javascript"
+></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("/api/dog-breeds")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.length) {
+          return;
+        }
+        new simpleDatatables.DataTable(".dog-breeds", {
+          perPage: 25,
+          columns: [
+            {
+              select: 1,
+              render: function (d, td, rowIndex, cellIndex) {
+                return `<a href="/dog-breeds/${data[rowIndex].id}">${d[0].data}</a>`;
+              },
+            },
+            {
+              select: 4,
+              render: function (d, td, rowIndex, cellIndex) {
+                return `<div class="text-center">${d[0].data}</div>`;
+              },
+            },
+            {
+              select: 5,
+              render: function (d, td, rowIndex, cellIndex) {
+                return `<div class="text-center">${d[0].data}</div>`;
+              },
+            },
+            { select: [0, 2, 3, 6, 7, 8], hidden: true },
+          ],
+          data: {
+            data: data.map((item) => Object.values(item)),
+          },
+        });
+      });
+  });
+</script>
 {{end}}
