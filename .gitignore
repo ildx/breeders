@@ -24,6 +24,9 @@ tls/
 # Local binary file
 bin/
 
+# Local data files
+db/
+
 # Go workspace file
 go.work
 

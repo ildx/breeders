@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"html/template"
@@ -12,11 +13,13 @@ import (
 const port = ":4000"
 
 type application struct {
-	templateCache map[string]*template.Template
 	config        appConfig
+	DB            *sql.DB
+	templateCache map[string]*template.Template
 }
 
 type appConfig struct {
+	dsn      string
 	useCache bool
 }
 
@@ -26,7 +29,15 @@ func main() {
 	}
 
 	flag.BoolVar(&app.config.useCache, "cache", false, "Use template cache")
+	flag.StringVar(&app.config.dsn, "dsn", "mariadb:myverysecretpassword@tcp(localhost:3306)/breeders?parseTime=true&tls=false&collation=utf8_unicode_ci&timeout=5s", "DSN")
 	flag.Parse()
+
+	db, err := connectToDatabase(app.config.dsn)
+	if err != nil {
+		log.Panic(err)
+	}
+
+  app.DB = db
 
 	server := &http.Server{
 		Addr:              port,
@@ -39,7 +50,7 @@ func main() {
 
 	fmt.Println("Starting server on port", port)
 
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
