@@ -34,6 +34,8 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/api/cat-breeds", app.GetAllCatBreeds)
 
+	mux.Get("/dog-of-month", app.DogOfMonth)
+
 	mux.Get("/", app.Home)
 	mux.Get("/{page}", app.Page)
 

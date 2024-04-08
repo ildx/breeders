@@ -8,6 +8,7 @@ import (
 var repo Repository
 
 type Models struct {
+	Dog      Dog
 	DogBreed DogBreed
 }
 
@@ -20,6 +21,17 @@ func New(conn *sql.DB) *Models {
 	return &Models{
 		DogBreed: DogBreed{},
 	}
+}
+
+type DogOfMonth struct {
+	ID    int
+	Dog   *Dog
+	Video string
+	Image string
+}
+
+func (d *Dog) GetDogOfMonthByID(id int) (*DogOfMonth, error) {
+	return repo.GetDogOfMonthByID(id)
 }
 
 type Breeder struct {
