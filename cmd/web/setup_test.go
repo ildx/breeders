@@ -4,14 +4,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ildx/breeders/models"
+	"github.com/ildx/breeders/config"
 )
 
 var testApp application
 
 func TestMain(m *testing.M) {
 	testApp = application{
-		Models: *models.New(nil),
+		App: config.New(nil),
 	}
 	os.Exit(m.Run())
 }

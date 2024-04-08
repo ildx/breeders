@@ -8,14 +8,14 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ildx/breeders/models"
+	"github.com/ildx/breeders/config"
 )
 
 const port = ":4000"
 
 type application struct {
+	App           *config.Application
 	config        appConfig
-	Models        models.Models
 	templateCache map[string]*template.Template
 }
 
@@ -38,7 +38,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	app.Models = *models.New(db)
+	app.App = config.New(db)
 
 	server := &http.Server{
 		Addr:              port,
