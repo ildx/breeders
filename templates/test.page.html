@@ -72,6 +72,35 @@
           <span class="muted">Nothing received yet</span>
         </pre>
       </div>
+
+      <hr class="mt-4" />
+
+      <h3 class="mt-3">Abstract Factory 2</h3>
+      <form>
+        <div class="row mb-3">
+          <label for="species" class="col-sm-2 col-form-label">Species</label>
+          <select id="species" class="form-select">
+            <option selected>Choose...</option>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+          </select>
+        </div>
+        <div class="row mb-3">
+          <label for="breed" class="col-sm-2 col-form-label">Breed</label>
+          <input type="text" class="form-control" id="breed" />
+        </div>
+        <a
+          href="javascript:void(0)"
+          id="abstract-factory-2-btn"
+          class="btn btn-outline-secondary"
+          >Get animal from abstract factory</a
+        >
+      </form>
+      <div class="mt-2" style="outline: 1px solid silver; padding: 2rem">
+        <pre id="abstract-factory-2-output">
+          <span class="muted">Nothing received yet</span>
+        </pre>
+      </div>
     </div>
   </div>
 </div>
@@ -92,6 +121,9 @@
     let factoryOutput = document.getElementById("factory-output");
     let abstractOutput = document.getElementById("abstract-output");
     let builderOutput = document.getElementById("builder-output");
+
+    let abstract2Btn = document.getElementById("abstract-factory-2-btn");
+    let abstract2Output = document.getElementById("abstract-factory-2-output");
 
     function callApi(route, output) {
       fetch(route, { method: "GET" })
@@ -122,6 +154,15 @@
     catBuilderBtn.addEventListener("click", () =>
       callApi("/api/cat-from-builder", builderOutput),
     );
+
+    abstract2Btn.addEventListener("click", () => {
+      let species = document.getElementById("species").value;
+      let breed = document.getElementById("breed").value;
+      callApi(
+        `/api/animal-from-abstract-factory/${species}/${breed}`,
+        abstract2Output,
+      );
+    });
   });
 </script>
 {{end}}

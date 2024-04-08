@@ -76,6 +76,10 @@ func (d *DogBreed) All() ([]*DogBreed, error) {
 	return repo.GetAllDogBreeds()
 }
 
+func (d *DogBreed) GetBreedByName(b string) (*DogBreed, error) {
+	return repo.GetBreedByName(b)
+}
+
 type Cat struct {
 	ID               int       `json:"id"`
 	CatName          string    `json:"cat_name"`

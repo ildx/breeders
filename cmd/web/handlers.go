@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/ildx/breeders/pets"
@@ -107,11 +108,27 @@ func (app *application) CreateCatWithBuilder(w http.ResponseWriter, r *http.Requ
 func (app *application) GetAllCatBreeds(w http.ResponseWriter, r *http.Request) {
 	var t toolbox.Tools
 
-	b, err := app.catService.GetAllBreeds()
+	b, err := app.App.CatService.GetAllBreeds()
 	if err != nil {
 		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
 		return
 	}
 
 	_ = t.WriteJSON(w, http.StatusOK, b)
+}
+
+func (app *application) AnimalFromAbstractFactory(w http.ResponseWriter, r *http.Request) {
+	var t toolbox.Tools
+
+	s := chi.URLParam(r, "species")
+	b := chi.URLParam(r, "breed")
+	breed, _ := url.QueryUnescape(b)
+
+	pet, err := pets.NewPetWithBreedFromAbstractFactory(s, breed)
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	_ = t.WriteJSON(w, http.StatusOK, pet)
 }

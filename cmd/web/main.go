@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/ildx/breeders/adapters"
 	"github.com/ildx/breeders/config"
 )
 
@@ -15,7 +16,6 @@ const port = ":4000"
 
 type application struct {
 	App           *config.Application
-	catService    *RemoteService
 	config        appConfig
 	templateCache map[string]*template.Template
 }
@@ -40,16 +40,14 @@ func main() {
 	}
 
 	// api that returns xml
-	xmlBackend := &XMLBackend{}
-	xmlAdapter := &RemoteService{Remote: xmlBackend}
-	app.catService = xmlAdapter
+	xmlBackend := &adapters.XMLBackend{}
+	xmlAdapter := &adapters.RemoteService{Remote: xmlBackend}
 
 	// api that returns json
-	// jsonBackend := &JSONBackend{}
-	// jsonAdapter := &RemoteService{Remote: jsonBackend}
-	// app.catService = jsonAdapter
+	// jsonBackend := &adapters.JSONBackend{}
+	// jsonAdapter := &adapters.RemoteService{Remote: jsonBackend}
 
-	app.App = config.New(db)
+	app.App = config.New(db, xmlAdapter)
 
 	server := &http.Server{
 		Addr:              port,
