@@ -15,6 +15,7 @@ const port = ":4000"
 
 type application struct {
 	App           *config.Application
+	catService    *RemoteService
 	config        appConfig
 	templateCache map[string]*template.Template
 }
@@ -37,6 +38,16 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
+
+	// api that returns xml
+	xmlBackend := &XMLBackend{}
+	xmlAdapter := &RemoteService{Remote: xmlBackend}
+	app.catService = xmlAdapter
+
+	// api that returns json
+	// jsonBackend := &JSONBackend{}
+	// jsonAdapter := &RemoteService{Remote: jsonBackend}
+	// app.catService = jsonAdapter
 
 	app.App = config.New(db)
 

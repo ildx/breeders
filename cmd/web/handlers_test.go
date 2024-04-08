@@ -11,9 +11,21 @@ func TestApplication_GetAllDogBreedsHandler(t *testing.T) {
 	res := httptest.NewRecorder()
 
 	handler := http.HandlerFunc(testApp.GetAllDogBreedsHandler)
-  handler.ServeHTTP(res, req)
+	handler.ServeHTTP(res, req)
 
-  if res.Code != http.StatusOK {
-    t.Errorf("wrong status code; expected 200, got %d", res.Code)
-  }
+	if res.Code != http.StatusOK {
+		t.Errorf("wrong status code; expected 200, got %d", res.Code)
+	}
+}
+
+func TestApplication_GetAllCatBreeds(t *testing.T) {
+	req, _ := http.NewRequest("GET", "/api/cat-breeds", nil)
+	res := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(testApp.GetAllCatBreeds)
+	handler.ServeHTTP(res, req)
+
+	if res.Code != http.StatusOK {
+		t.Errorf("wrong status code; expected 200, got %d", res.Code)
+	}
 }
